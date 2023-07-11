@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEYVE SUYUNA KATILACAK ŞEKER MİKTARI</title>
+    <style>
+        /* Genel stil ayarları */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Renk paleti */
+        :root {
+            --bg-color: #f0f0f0;
+            --primary-color: #2196f3;
+            --secondary-color: #f44336;
+            --text-color: #333333;
+        }
+
+        /* Sayfa stil ayarları */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Tablo stil ayarları */
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            font-weight: normal;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Buton stil ayarları */
+        button {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Mobil uyumluluk için medya sorgusu */
+        @media screen and (max-width: 600px) {
+            table, button {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>MEYVE SUYUNA KATILACAK ŞEKER MİKTARI</h1>
+    <table>
+        <tr>
+            <th>MEYVE SUYU MİKTARI (Litre)</th>
+            <td><input id="meyve-suyu-miktari" type="number" value="1"></td>
+        </tr>
+        <tr>
+            <th>MEYVE SUYU YOĞUNLUK DEĞERİ</th>
+            <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
+        </tr>
+        <tr>
+            <th>OLMASI GEREKEN DEĞER</th>
+            <td><input id="olmasi-gereken-deger" type="number" value="1100"></td>
+        </tr>
+        <tr>
+            <th>FARK</th>
+            <td><span id="fark"></span></td>
+        </tr>
+        <tr>
+            <th>1 LİTRE İÇİN KATILACAK ŞEKER (GR)</th>
+            <td><span id="seker-miktari"></span></td>
+        </tr>
+    </table>
+
+    <button onclick="sekerHesapla()">Şeker Miktarını Hesapla</button>
+
+    <h1>ALKOL DEĞERİ HESAPLAMA</h1>
+    <table>
+        <tr>
+            <th>İLK YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <td><input id="ilk-yogunluk" type="number" value="1100"></td>
+        </tr>
+        <tr>
+            <th>SON YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <td><input id="son-yogunluk" type="number" value="1000"></td>
+        </tr>
+        <tr>
+            <th>
+<td><span id="fark2"></span></td>
+</tr>
+<tr>
+<th>ALKOL DEĞERİ (%)</th>
+<td><span id="alkol-degeri"></span></td>
+</tr>
+</table>
+
+<button onclick="alkolHesapla()">Alkol Değerini Hesapla</button>
+
+<p>Twitter: @kullaniciadi</p>
+
+<script>
+    function sekerHesapla() {
+        var meyveSuyuMiktari = parseFloat(document.getElementById('meyve-suyu-miktari').value);
+        var meyveSuyuYogunluk = parseFloat(document.getElementById('meyve-suyu-yogunluk').value);
+        var olmasiGerekenDeger = parseFloat(document.getElementById('olmasi-gereken-deger').value);
+
+        var fark = olmasiGerekenDeger - meyveSuyuYogunluk;
+        var sekerMiktari = fark * 3 * meyveSuyuMiktari;
+
+        document.getElementById('fark').textContent = fark.toFixed(2);
+        document.getElementById('seker-miktari').textContent = sekerMiktari.toFixed(2);
+    }
+
+    function alkolHesapla() {
+        var ilkYogunluk = parseFloat(document.getElementById('ilk-yogunluk').value);
+        var sonYogunluk = parseFloat(document.getElementById('son-yogunluk').value);
+
+        var fark2 = ilkYogunluk - sonYogunluk;
+        var alkolDegeri = fark2 * 0.136;
+
+        document.getElementById('fark2').textContent = fark2.toFixed(2);
+        document.getElementById('alkol-degeri').textContent = alkolDegeri.toFixed(2);
+    }
+</script>
+</body>
+</html>
