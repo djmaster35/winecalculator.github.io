@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEYVE SUYUNA KATILACAK ŞEKER MİKTARI</title>
+    <style>
+        /* Genel stiller */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Renk paleti */
+        :root {
+            --bg-color: #f0f0f0;
+            --primary-color: #2196f3;
+            --secondary-color: #f44336;
+            --text-color: #333333;
+        }
+
+        /* Sayfa stilleri */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Tablo stilleri */
+        table {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--primary-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* Buton stilleri */
+        button {
+            display: block;
+            width: 80%;
+            max-width: 250px;
+            margin: 20px auto;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e53935;
+        }
+
+        /* Sonuçların stil tanımı */
+        .result {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        /* Mobil uyumluluk için media sorgusu */
+        @media screen and (max-width: 600px) {
+            table, button {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>MEYVE SUYUNA KATILACAK ŞEKER MİKTARI</h1>
+    <table>
+        <tr>
+            <th>MEYVE SUYU MİKTARI (Litre)</th>
+            <td><input id="meyve-suyu-miktari" type="number" value="1"></td>
+        </tr>
+        <tr>
+            <th>MEYVE SUYU YOĞUNLUK DEĞERİ</th>
+            <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
+        </tr>
+        <tr>
+            <th>OLMASI GEREKEN DEĞER</th>
+            <td><input id="olmasi-gereken-deger" type="number" value="1100"></td>
+        </tr>
+        <tr>
+            <th>1 LİTRE İÇİN KATILACAK ŞEKER</th>
+            <td><span id="seker-miktari" class="result"></span></td>
+        </tr>
+    </table>
+
+    <button onclick="sekerHesapla()">Şeker Miktarını Hesapla</button>
+
+    <h1>ALKOL DEĞERİ HESAPLAMA</h1>
+    <table>
+        <tr>
+            <th>İLK YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <td><input id="ilk-yogunluk" type="number" value="1100"></td>
+        </tr>
+        <tr>
+            <th>SON YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <td><input id="son-yogunluk" type="number" value="1000"></td>
+        </tr>
+        <tr>
+            <th>SONUÇ</th>
+            <td><span id="alkol-degeri" class="result"></span></td>
+        </tr>
+    </table>
+
+    <button onclick="alkolHesapla()">Alkol Değerini Hesapla</button>
+
+    <p>Twitter: @_ilhanakdeniz_</p>
+
+    <!-- JavaScript kodu -->
+    <script>
+        // Şeker miktarını hesaplayan fonksiyon
+        function sekerHesapla() {
+            var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
+            var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
+            var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
+            var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
+            sekerMiktari = Math.round(sekerMiktari);
+            var sekerSonuc = document.getElementById("seker-miktari");
+            
+            // Sonucu görünür hale getirin ve fade-in animasyonunu uygulayın
+            sekerSonuc.style.display = "inline-block"; // Sonucu görünür yapın
+            var opacity = 0;
+            var timer = setInterval(function () {
+                if (opacity >= 1) {
+                    clearInterval(timer);
+                }
+                sekerSonuc.style.opacity = opacity;
+                opacity += 0.1; // Opaklık değerini artırın
+            }, 100);
+            sekerSonuc.innerHTML = sekerMiktari + " GR"; // GR eklemesi sonuca eklenir
+        }
+
+        // Alkol değerini hesaplayan fonksiyon
+        function alkolHesapla() {
+            var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
+            var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
+            var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
+            alkolDegeri = Math.round(alkolDegeri);
+            var alkolSonuc = document.getElementById("alkol-degeri");
+            
+            // Sonucu görünür hale getirin ve fade-in animasyonunu uygulayın
+            alkolSonuc.style.display = "inline-block"; // Sonucu görünür yapın
+            var opacity = 0;
+            var timer = setInterval(function () {
+                if (opacity >= 1) {
+                    clearInterval(timer);
+                }
+                alkolSonuc.style.opacity = opacity;
+                opacity += 0.1; // Opaklık değerini artırın
+            }, 100);
+            alkolSonuc.innerHTML = "%" + alkolDegeri; // % işareti sonuca eklenir
+        }
+    </script>
+
+</body>
+
+</html>
