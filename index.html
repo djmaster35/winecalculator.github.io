@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEYVE SUYUNDAN HOBI SARAP YAPIMI SEKER VE ALKOL HESAPLAYICI</title>
     <style>
-        /* Genel stiller */
+        /* General styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,7 +14,7 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Renk paleti */
+        /* Color palette */
         :root {
             --bg-color: #f0f0f0;
             --primary-color: #2196f3;
@@ -22,7 +22,7 @@
             --text-color: #333333;
         }
 
-        /* Sayfa stilleri */
+        /* Page styles */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -39,7 +39,7 @@
             margin-top: 20px;
         }
 
-        /* Tablo stilleri */
+        /* Table styles */
         table {
             width: 100%;
             max-width: 500px;
@@ -68,7 +68,7 @@
             font-size: 14px;
         }
 
-        /* Buton stilleri */
+        /* Button styles */
         button {
             display: block;
             width: 80%;
@@ -88,14 +88,22 @@
             background-color: #e53935;
         }
 
-        /* Sonuçların stil tanımı */
+        .small-button {
+            display: inline-block;
+            width: auto;
+            margin: 5px;
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        /* Results style */
         .result {
             display: none;
             opacity: 0;
             transition: opacity 1s;
         }
 
-        /* Mobil uyumluluk için media sorgusu */
+        /* Media query for mobile compatibility */
         @media screen and (max-width: 600px) {
             table, button {
                 width: 95%;
@@ -120,8 +128,15 @@
             <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
         </tr>
         <tr>
-            <th>OLMASI GEREKEN DEĞER</th>
-            <td><input id="olmasi-gereken-deger" type="number" value="1100"></td>
+            <th>
+                OLMASI GEREKEN DEĞER
+                <br>
+                <button type="button" class="small-button" onclick="setDeger(1080)">Ekmek Mayası</button>
+                <button type="button" class="small-button" onclick="setDeger(1100)">Şarap Mayası</button>
+            </th>
+            <td>
+                <input id="olmasi-gereken-deger" type="number" value="1100">
+            </td>
         </tr>
         <tr>
             <th>KATILACAK SEKER MIKTARI</th>
@@ -151,9 +166,7 @@
 
     <p>Twitter: @_ilhanakdeniz_</p>
 
-    <!-- JavaScript kodu -->
     <script>
-        // Şeker miktarını hesaplayan fonksiyon
         function sekerHesapla() {
             var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
             var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
@@ -162,20 +175,18 @@
             sekerMiktari = Math.round(sekerMiktari);
             var sekerSonuc = document.getElementById("seker-miktari");
             
-            // Sonucu görünür hale getirin ve fade-in animasyonunu uygulayın
-            sekerSonuc.style.display = "inline-block"; // Sonucu görünür yapın
+            sekerSonuc.style.display = "inline-block";
             var opacity = 0;
             var timer = setInterval(function () {
                 if (opacity >= 1) {
                     clearInterval(timer);
                 }
                 sekerSonuc.style.opacity = opacity;
-                opacity += 0.1; // Opaklık değerini artırın
+                opacity += 0.1;
             }, 100);
-            sekerSonuc.innerHTML = sekerMiktari + " GR"; // GR eklemesi sonuca eklenir
+            sekerSonuc.innerHTML = sekerMiktari + " GR";
         }
 
-        // Alkol değerini hesaplayan fonksiyon
         function alkolHesapla() {
             var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
             var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
@@ -183,17 +194,20 @@
             alkolDegeri = Math.round(alkolDegeri);
             var alkolSonuc = document.getElementById("alkol-degeri");
             
-            // Sonucu görünür hale getirin ve fade-in animasyonunu uygulayın
-            alkolSonuc.style.display = "inline-block"; // Sonucu görünür yapın
+            alkolSonuc.style.display = "inline-block";
             var opacity = 0;
             var timer = setInterval(function () {
                 if (opacity >= 1) {
                     clearInterval(timer);
                 }
                 alkolSonuc.style.opacity = opacity;
-                opacity += 0.1; // Opaklık değerini artırın
+                opacity += 0.1;
             }, 100);
-            alkolSonuc.innerHTML = "%" + alkolDegeri; // % işareti sonuca eklenir
+            alkolSonuc.innerHTML = "%" + alkolDegeri;
+        }
+
+        function setDeger(deger) {
+            document.getElementById("olmasi-gereken-deger").value = deger;
         }
     </script>
 
