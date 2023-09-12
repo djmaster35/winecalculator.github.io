@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEYVE SUYUNDAN HOBI SARAP YAPIMI SEKER VE ALKOL HESAPLAYICI</title>
+    <title>SARAP HESAPLAYICI</title>
     <style>
         /* General styles */
         * {
@@ -26,6 +26,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
+            font-size: 16px;
         }
 
         h1 {
@@ -42,7 +43,7 @@
         /* Table styles */
         table {
             width: 100%;
-            max-width: 500px;
+            max-width: 400px; /* Daraltıldı */
             margin: 20px auto;
             border-collapse: collapse;
             border-radius: 5px;
@@ -51,7 +52,7 @@
         }
 
         th, td {
-            padding: 15px;
+            padding: 10px; /* Azaltıldı */
             border: 1px solid var(--primary-color);
         }
 
@@ -62,7 +63,7 @@
 
         input[type="number"] {
             width: 100%;
-            padding: 10px;
+            padding: 8px; /* Azaltıldı */
             border: 1px solid var(--primary-color);
             border-radius: 5px;
             font-size: 14px;
@@ -79,7 +80,7 @@
             border-radius: 5px;
             background-color: var(--secondary-color);
             color: white;
-            font-size: 16px;
+            font-size: 14px; /* Azaltıldı */
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -117,19 +118,19 @@
 </head>
 
 <body>
-    <h1>MEYVE SUYUNA KATILACAK ŞEKER MİKTARI</h1>
+    <h1>ŞEKER MİKTARI HESAPLAMA</h1>
     <table>
         <tr>
-            <th>MEYVE SUYU MİKTARI (Litre)</th>
+            <th>MEYVE SUYU (Litre)</th>
             <td><input id="meyve-suyu-miktari" type="number" value="1"></td>
         </tr>
         <tr>
-            <th>MEYVE SUYU YOĞUNLUK DEĞERİ</th>
+            <th>YOĞUNLUK DEĞERİ</th>
             <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
         </tr>
         <tr>
             <th>
-                OLMASI GEREKEN DEĞER
+                OLMASI İSTENEN YOĞUNLUK
                 <br>
                 <button type="button" class="small-button" onclick="setDeger(1080)">Ekmek Mayası</button>
                 <button type="button" class="small-button" onclick="setDeger(1100)">Şarap Mayası</button>
@@ -139,30 +140,30 @@
             </td>
         </tr>
         <tr>
-            <th>KATILACAK SEKER MIKTARI</th>
+            <th>ŞEKER MİKTARI</th>
             <td><span id="seker-miktari" class="result"></span></td>
         </tr>
     </table>
 
-    <button onclick="sekerHesapla()">Şeker Miktarını Hesapla</button>
+    <button onclick="sekerHesapla()">Hesapla</button>
 
     <h1>ALKOL DEĞERİ HESAPLAMA</h1>
     <table>
         <tr>
-            <th>İLK YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <th>İLK YOĞUNLUK</th>
             <td><input id="ilk-yogunluk" type="number" value="1100"></td>
         </tr>
         <tr>
-            <th>SON YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <th>SON YOĞUNLUK</th>
             <td><input id="son-yogunluk" type="number" value="1000"></td>
         </tr>
         <tr>
-            <th>SONUÇ</th>
+            <th>ALKOL DEĞERİ</th>
             <td><span id="alkol-degeri" class="result"></span></td>
         </tr>
     </table>
 
-    <button onclick="alkolHesapla()">Alkol Değerini Hesapla</button>
+    <button onclick="alkolHesapla()">Hesapla</button>
 
     <p>Twitter: @_ilhanakdeniz_</p>
 
@@ -174,7 +175,7 @@
             var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
             sekerMiktari = Math.round(sekerMiktari);
             var sekerSonuc = document.getElementById("seker-miktari");
-            
+
             sekerSonuc.style.display = "inline-block";
             var opacity = 0;
             var timer = setInterval(function () {
@@ -193,7 +194,7 @@
             var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
             alkolDegeri = Math.round(alkolDegeri);
             var alkolSonuc = document.getElementById("alkol-degeri");
-            
+
             alkolSonuc.style.display = "inline-block";
             var opacity = 0;
             var timer = setInterval(function () {
@@ -210,7 +211,6 @@
             document.getElementById("olmasi-gereken-deger").value = deger;
         }
     </script>
-
 </body>
 
 </html>
