@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEYVE SUYUNDAN HOBI SARAP YAPIMI SEKER VE ALKOL HESAPLAYICI</title>
+    <title>SARAP HESAPLAYICI</title>
     <style>
         /* General styles */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Courier New', monospace;
+            font-family: Arial, sans-serif;
         }
 
         /* Color palette */
@@ -26,36 +26,34 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
+            font-size: 16px;
         }
 
-        /* Header styles */
         h1 {
             text-align: center;
             margin: 20px 0;
             font-size: 24px;
         }
 
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
         /* Table styles */
         table {
             width: 100%;
-            max-width: 500px;
+            max-width: 400px; /* Daraltıldı */
+            margin: 20px auto;
             border-collapse: collapse;
             border-radius: 5px;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            margin-bottom: 20px;
         }
 
         th, td {
-            padding: 15px;
+            padding: 10px; /* Azaltıldı */
             border: 1px solid var(--primary-color);
-            text-align: center;
         }
 
         th {
@@ -65,11 +63,10 @@
 
         input[type="number"] {
             width: 100%;
-            padding: 10px;
+            padding: 8px; /* Azaltıldı */
             border: 1px solid var(--primary-color);
             border-radius: 5px;
-            font-size: 24px; /* Increase font size for the digital clock effect */
-            text-align: center; /* Center-align the numbers */
+            font-size: 14px;
         }
 
         /* Button styles */
@@ -83,7 +80,7 @@
             border-radius: 5px;
             background-color: var(--secondary-color);
             color: white;
-            font-size: 16px;
+            font-size: 14px; /* Azaltıldı */
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -105,8 +102,6 @@
             display: none;
             opacity: 0;
             transition: opacity 1s;
-            font-size: 24px; /* Increase font size for the digital clock effect */
-            text-align: center; /* Center-align the numbers */
         }
 
         /* Media query for mobile compatibility */
@@ -123,14 +118,14 @@
 </head>
 
 <body>
-    <h1>MEYVE SUYUNA KATILACAK ŞEKER MİKTARI</h1>
+    <h1>ŞEKER MİKTARI HESAPLAMA</h1>
     <table>
         <tr>
-            <th>MEYVE SUYU MİKTARI (Litre)</th>
+            <th>MEYVE SUYU (Litre)</th>
             <td><input id="meyve-suyu-miktari" type="number" value="1"></td>
         </tr>
         <tr>
-            <th>MEYVE SUYU YOĞUNLUK DEĞERİ</th>
+            <th>YOĞUNLUK DEĞERİ</th>
             <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
         </tr>
         <tr>
@@ -145,30 +140,30 @@
             </td>
         </tr>
         <tr>
-            <th>KATILACAK ŞEKER MİKTARI</th>
+            <th>ŞEKER MİKTARI</th>
             <td><span id="seker-miktari" class="result"></span></td>
         </tr>
     </table>
 
-    <button onclick="sekerHesapla()">Şeker Miktarını Hesapla</button>
+    <button onclick="sekerHesapla()">Hesapla</button>
 
     <h1>ALKOL DEĞERİ HESAPLAMA</h1>
     <table>
         <tr>
-            <th>İLK YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <th>İLK YOĞUNLUK</th>
             <td><input id="ilk-yogunluk" type="number" value="1100"></td>
         </tr>
         <tr>
-            <th>SON YOĞUNLUK ÖLÇÜMÜNÜ GİRİN</th>
+            <th>SON YOĞUNLUK</th>
             <td><input id="son-yogunluk" type="number" value="1000"></td>
         </tr>
         <tr>
-            <th>SONUÇ</th>
+            <th>ALKOL DEĞERİ</th>
             <td><span id="alkol-degeri" class="result"></span></td>
         </tr>
     </table>
 
-    <button onclick="alkolHesapla()">Alkol Değerini Hesapla</button>
+    <button onclick="alkolHesapla()">Hesapla</button>
 
     <p>Twitter: @_ilhanakdeniz_</p>
 
@@ -178,6 +173,7 @@
             var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
             var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
             var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
+            sekerMiktari = Math.round(sekerMiktari);
             var sekerSonuc = document.getElementById("seker-miktari");
 
             sekerSonuc.style.display = "inline-block";
@@ -189,9 +185,6 @@
                 sekerSonuc.style.opacity = opacity;
                 opacity += 0.1;
             }, 100);
-
-            // Format the result to remove leading zeros and add "GR" at the end
-            sekerMiktari = parseFloat(sekerMiktari.toFixed(2)); // Round to 2 decimal places
             sekerSonuc.innerHTML = sekerMiktari + " GR";
         }
 
@@ -199,6 +192,7 @@
             var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
             var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
             var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
+            alkolDegeri = Math.round(alkolDegeri);
             var alkolSonuc = document.getElementById("alkol-degeri");
 
             alkolSonuc.style.display = "inline-block";
@@ -210,10 +204,7 @@
                 alkolSonuc.style.opacity = opacity;
                 opacity += 0.1;
             }, 100);
-
-            // Format the result to remove leading zeros and add "%" at the end
-            alkolDegeri = parseFloat(alkolDegeri.toFixed(2)); // Round to 2 decimal places
-            alkolSonuc.innerHTML = alkolDegeri + "%";
+            alkolSonuc.innerHTML = "%" + alkolDegeri;
         }
 
         function setDeger(deger) {
