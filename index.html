@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SARAP HESAPLAYICI</title>
+    <title data-translate="title">ŞEKER MİKTARI HESAPLAYICI</title>
     <style>
         /* General styles */
         * {
@@ -43,7 +43,7 @@
         /* Table styles */
         table {
             width: 100%;
-            max-width: 400px; /* Daraltıldı */
+            max-width: 400px;
             margin: 20px auto;
             border-collapse: collapse;
             border-radius: 5px;
@@ -52,7 +52,7 @@
         }
 
         th, td {
-            padding: 10px; /* Azaltıldı */
+            padding: 10px;
             border: 1px solid var(--primary-color);
         }
 
@@ -63,7 +63,7 @@
 
         input[type="number"] {
             width: 100%;
-            padding: 8px; /* Azaltıldı */
+            padding: 8px;
             border: 1px solid var(--primary-color);
             border-radius: 5px;
             font-size: 14px;
@@ -73,14 +73,14 @@
         button {
             display: block;
             width: 80%;
-            max-width: 250px;
+            max-width: 100px;
             margin: 20px auto;
             padding: 12px;
             border: none;
             border-radius: 5px;
             background-color: var(--secondary-color);
             color: white;
-            font-size: 14px; /* Azaltıldı */
+            font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -118,98 +118,148 @@
 </head>
 
 <body>
-    <h1>ŞEKER MİKTARI HESAPLAMA</h1>
+    <div style="text-align: center;">
+        <button onclick="changeLanguage('tr')" style="display: inline-block; margin-right: 5px;">Türkçe</button>
+        <button onclick="changeLanguage('en')" style="display: inline-block;">English</button>
+    </div>
+    
+    <h1 data-translate="title">ŞEKER MİKTARI HESAPLAYICI</h1>
     <table>
         <tr>
-            <th>MEYVE SUYU (Litre)</th>
+            <th data-translate="fruit_juice_label">MEYVE SUYU (Litre)</th>
             <td><input id="meyve-suyu-miktari" type="number" value="1"></td>
         </tr>
         <tr>
-            <th>YOĞUNLUK DEĞERİ</th>
+            <th data-translate="density_label">YOĞUNLUK DEĞERİ</th>
             <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
         </tr>
         <tr>
             <th>
-                OLMASI İSTENEN YOĞUNLUK
+                <span data-translate="desired_density_label">OLMASI İSTENEN YOĞUNLUK</span>
                 <br>
-                <button type="button" class="small-button" onclick="setDeger(1080)">Ekmek Mayası</button>
-                <button type="button" class="small-button" onclick="setDeger(1100)">Şarap Mayası</button>
+                <button type="button" class="small-button" onclick="setDeger(1080)" data-translate="bread_yeast_button">Ekmek Mayası</button>
+                <button type="button" class="small-button" onclick="setDeger(1100)" data-translate="wine_yeast_button">Şarap Mayası</button>
             </th>
             <td>
                 <input id="olmasi-gereken-deger" type="number" value="1100">
             </td>
         </tr>
         <tr>
-            <th>ŞEKER MİKTARI</th>
+            <th data-translate="sugar_label">ŞEKER MİKTARI</th>
             <td><span id="seker-miktari" class="result"></span></td>
         </tr>
     </table>
 
-    <button onclick="sekerHesapla()">Hesapla</button>
+    <button onclick="sekerHesapla()" data-translate="calculate_button">Hesapla</button>
 
-    <h1>ALKOL DEĞERİ HESAPLAMA</h1>
+    <h1 data-translate="alcohol_title">ALKOL DEĞERİ HESAPLAMA</h1>
     <table>
         <tr>
-            <th>İLK YOĞUNLUK</th>
+            <th data-translate="initial_density_label">İLK YOĞUNLUK</th>
             <td><input id="ilk-yogunluk" type="number" value="1100"></td>
         </tr>
         <tr>
-            <th>SON YOĞUNLUK</th>
+            <th data-translate="final_density_label">SON YOĞUNLUK</th>
             <td><input id="son-yogunluk" type="number" value="1000"></td>
         </tr>
         <tr>
-            <th>ALKOL DEĞERİ</th>
+            <th data-translate="alcohol_label">ALKOL DEĞERİ</th>
             <td><span id="alkol-degeri" class="result"></span></td>
         </tr>
     </table>
 
-    <button onclick="alkolHesapla()">Hesapla</button>
+    <button onclick="alkolHesapla()" data-translate="calculate_button">Hesapla</button>
 
-    <p>Twitter: @_ilhanakdeniz_</p>
+    <p data-translate="twitter_text">Twitter: @_ilhanakdeniz_</p>
 
     <script>
+        var languages = {
+            'tr': {
+                'title': 'ŞEKER MİKTARI HESAPLAYICI',
+                'fruit_juice_label': 'MEYVE SUYU (Litre)',
+                'density_label': 'YOĞUNLUK DEĞERİ',
+                'desired_density_label': 'OLMASI İSTENEN YOĞUNLUK',
+                'bread_yeast_button': 'Ekmek Mayası',
+                'wine_yeast_button': 'Şarap Mayası',
+                'sugar_label': 'ŞEKER MİKTARI',
+                'calculate_button': 'Hesapla',
+                'alcohol_title': 'ALKOL DEĞERİ HESAPLAMA',
+                'initial_density_label': 'İLK YOĞUNLUK',
+                'final_density_label': 'SON YOĞUNLUK',
+                'alcohol_label': 'ALKOL DEĞERİ',
+                'twitter_text': 'Twitter: @_ilhanakdeniz_'
+            },
+            'en': {
+                'title': 'SUGAR CALCULATOR',
+                'fruit_juice_label': 'FRUIT JUICE (Liters)',
+                'density_label': 'DENSITY VALUE',
+                'desired_density_label': 'DESIRED DENSITY',
+                'bread_yeast_button': 'Bread Yeast',
+                'wine_yeast_button': 'Wine Yeast',
+                'sugar_label': 'SUGAR AMOUNT',
+                'calculate_button': 'Calculate',
+                'alcohol_title': 'ALCOHOL VALUE CALCULATOR',
+                'initial_density_label': 'INITIAL DENSITY',
+                'final_density_label': 'FINAL DENSITY',
+                'alcohol_label': 'ALCOHOL VALUE',
+                'twitter_text': 'Twitter: @_ilhanakdeniz_'
+            }
+        };
+
+        function changeLanguage(lang) {
+            var elements = document.querySelectorAll('[data-translate]');
+            var langData = languages[lang];
+
+            elements.forEach(function (element) {
+                var key = element.getAttribute('data-translate');
+                if (langData.hasOwnProperty(key)) {
+                    element.innerHTML = langData[key];
+                }
+            });
+        }
+
         function sekerHesapla() {
-    var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
-    var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
-    var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
-    var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
-    sekerMiktari = Math.round(sekerMiktari);
-    var sekerSonuc = document.getElementById("seker-miktari");
+            var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
+            var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
+            var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
+            var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
+            sekerMiktari = Math.round(sekerMiktari);
+            var sekerSonuc = document.getElementById("seker-miktari");
 
-    sekerSonuc.style.display = "inline-block";
-    var opacity = 0;
-    var timer = setInterval(function () {
-        if (opacity >= 1) {
-            clearInterval(timer);
+            sekerSonuc.style.display = "inline-block";
+            var opacity = 0;
+            var timer = setInterval(function () {
+                if (opacity >= 1) {
+                    clearInterval(timer);
+                }
+                sekerSonuc.style.opacity = opacity;
+                opacity += 0.1;
+            }, 100);
+            sekerSonuc.innerHTML = '<strong>' + sekerMiktari + " GR</strong>";
         }
-        sekerSonuc.style.opacity = opacity;
-        opacity += 0.1;
-    }, 100);
-    sekerSonuc.innerHTML = '<strong>' + sekerMiktari + " GR</strong>";
-}
 
-function alkolHesapla() {
-    var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
-    var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
-    var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
-    alkolDegeri = Math.round(alkolDegeri * 100) / 100; // küsüratı iki rakama yuvarladım
-    var alkolSonuc = document.getElementById("alkol-degeri");
+        function alkolHesapla() {
+            var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
+            var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
+            var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
+            alkolDegeri = Math.round(alkolDegeri * 100) / 100;
+            var alkolSonuc = document.getElementById("alkol-degeri");
 
-    alkolSonuc.style.display = "inline-block";
-    var opacity = 0;
-    var timer = setInterval(function () {
-        if (opacity >= 1) {
-            clearInterval(timer);
+            alkolSonuc.style.display = "inline-block";
+            var opacity = 0;
+            var timer = setInterval(function () {
+                if (opacity >= 1) {
+                    clearInterval(timer);
+                }
+                alkolSonuc.style.opacity = opacity;
+                opacity += 0.1;
+            }, 100);
+            alkolSonuc.innerHTML = '<strong>%' + alkolDegeri + '</strong>';
         }
-        alkolSonuc.style.opacity = opacity;
-        opacity += 0.1;
-    }, 100);
-    alkolSonuc.innerHTML = '<strong>%' + alkolDegeri + '</strong>';
-}
 
-function setDeger(deger) {
-    document.getElementById("olmasi-gereken-deger").value = deger;
-}
+        function setDeger(deger) {
+            document.getElementById("olmasi-gereken-deger").value = deger;
+        }
     </script>
 </body>
 
