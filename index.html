@@ -169,47 +169,47 @@
 
     <script>
         function sekerHesapla() {
-            var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
-            var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
-            var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
-            var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
-            sekerMiktari = Math.round(sekerMiktari);
-            var sekerSonuc = document.getElementById("seker-miktari");
+    var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
+    var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
+    var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
+    var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
+    sekerMiktari = Math.round(sekerMiktari);
+    var sekerSonuc = document.getElementById("seker-miktari");
 
-            sekerSonuc.style.display = "inline-block";
-            var opacity = 0;
-            var timer = setInterval(function () {
-                if (opacity >= 1) {
-                    clearInterval(timer);
-                }
-                sekerSonuc.style.opacity = opacity;
-                opacity += 0.1;
-            }, 100);
-            sekerSonuc.innerHTML = sekerMiktari + " GR";
+    sekerSonuc.style.display = "inline-block";
+    var opacity = 0;
+    var timer = setInterval(function () {
+        if (opacity >= 1) {
+            clearInterval(timer);
         }
+        sekerSonuc.style.opacity = opacity;
+        opacity += 0.1;
+    }, 100);
+    sekerSonuc.innerHTML = '<strong>' + sekerMiktari + " GR</strong>";
+}
 
-        function alkolHesapla() {
-            var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
-            var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
-            var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
-            alkolDegeri = Math.round(alkolDegeri);
-            var alkolSonuc = document.getElementById("alkol-degeri");
+function alkolHesapla() {
+    var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
+    var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
+    var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
+    alkolDegeri = Math.round(alkolDegeri * 100) / 100; // küsüratı iki rakama yuvarladım
+    var alkolSonuc = document.getElementById("alkol-degeri");
 
-            alkolSonuc.style.display = "inline-block";
-            var opacity = 0;
-            var timer = setInterval(function () {
-                if (opacity >= 1) {
-                    clearInterval(timer);
-                }
-                alkolSonuc.style.opacity = opacity;
-                opacity += 0.1;
-            }, 100);
-            alkolSonuc.innerHTML = "%" + alkolDegeri;
+    alkolSonuc.style.display = "inline-block";
+    var opacity = 0;
+    var timer = setInterval(function () {
+        if (opacity >= 1) {
+            clearInterval(timer);
         }
+        alkolSonuc.style.opacity = opacity;
+        opacity += 0.1;
+    }, 100);
+    alkolSonuc.innerHTML = '<strong>%' + alkolDegeri + '</strong>';
+}
 
-        function setDeger(deger) {
-            document.getElementById("olmasi-gereken-deger").value = deger;
-        }
+function setDeger(deger) {
+    document.getElementById("olmasi-gereken-deger").value = deger;
+}
     </script>
 </body>
 
