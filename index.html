@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 
 <head>
     <meta charset="UTF-8">
@@ -11,14 +11,14 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica Neue', sans-serif;
         }
 
         /* Color palette */
         :root {
-            --bg-color: #f0f0f0;
-            --primary-color: #2196f3;
-            --secondary-color: #f44336;
+            --bg-color: #f7f7f7;
+            --primary-color: #3498db;
+            --secondary-color: #e74c3c;
             --text-color: #333333;
         }
 
@@ -27,16 +27,19 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
-            text-align: center;
             margin: 20px 0;
-            font-size: 24px;
+            font-size: 22px;
+            color: var(--primary-color);
         }
 
         p {
-            text-align: center;
             margin-top: 20px;
         }
 
@@ -86,7 +89,7 @@
         }
 
         button:hover {
-            background-color: #e53935;
+            background-color: #c0392b;
         }
 
         .small-button {
@@ -102,6 +105,32 @@
             display: none;
             opacity: 0;
             transition: opacity 1s;
+            font-size: 18px;
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+
+        /* Language buttons */
+        .language-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .language-button {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .language-button:hover {
+            background-color: #2980b9;
         }
 
         /* Media query for mobile compatibility */
@@ -111,16 +140,17 @@
             }
 
             h1 {
-                font-size: 20px;
+                font-size: 28px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div style="text-align: center;">
-        <button onclick="changeLanguage('tr')" style="display: inline-block; margin-right: 5px;">Türkçe</button>
-        <button onclick="changeLanguage('en')" style="display: inline-block;">English</button>
+    <div class="language-buttons">
+        <!-- Initially select the Turkish button -->
+        <button onclick="changeLanguage('tr')" class="language-button" style="background-color: #2980b9;">Türkçe</button>
+        <button onclick="changeLanguage('en')" class="language-button">English</button>
     </div>
     
     <h1 data-translate="title">ŞEKER MİKTARI HESAPLAYICI</h1>
