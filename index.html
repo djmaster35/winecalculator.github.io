@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-translate="title">ŞEKER MİKTARI HESAPLAYICI</title>
     <style>
-        /* General styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,15 +13,14 @@
             font-family: 'Helvetica Neue', sans-serif;
         }
 
-        /* Color palette */
         :root {
             --bg-color: #f7f7f7;
             --primary-color: #3498db;
             --secondary-color: #e74c3c;
             --text-color: #333333;
+            --loading-color: #2980b9;
         }
 
-        /* Page styles */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -30,7 +28,7 @@
             line-height: 1.6;
             text-align: center;
             margin: 0;
-            padding: 0;
+            padding: 0 20px;
         }
 
         h1 {
@@ -43,7 +41,6 @@
             margin-top: 20px;
         }
 
-        /* Table styles */
         table {
             width: 100%;
             max-width: 400px;
@@ -72,7 +69,6 @@
             font-size: 14px;
         }
 
-        /* Button styles */
         button {
             display: block;
             width: 80%;
@@ -100,7 +96,6 @@
             font-size: 12px;
         }
 
-        /* Results style */
         .result {
             display: none;
             opacity: 0;
@@ -110,7 +105,6 @@
             margin-top: 10px;
         }
 
-        /* Language buttons */
         .language-buttons {
             text-align: center;
             margin-bottom: 20px;
@@ -130,10 +124,25 @@
         }
 
         .language-button:hover {
-            background-color: #2980b9;
+            background-color: var(--loading-color);
         }
 
-        /* Media query for mobile compatibility */
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid var(--loading-color);
+            width: 24px;
+            height: 24px;
+            margin: 0 auto;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media screen and (max-width: 600px) {
             table, button {
                 width: 95%;
@@ -148,11 +157,10 @@
 
 <body>
     <div class="language-buttons">
-    <!-- Initially select the Turkish button -->
-    <button onclick="changeLanguage('tr')" class="language-button" style="background-color: #2980b9;">TR</button>
-    <button onclick="changeLanguage('en')" class="language-button" style="background-color: #2980b9;">EN</button>
-</div>
-    
+        <button onclick="changeLanguage('tr')" class="language-button" style="background-color: #2980b9;">TR</button>
+        <button onclick="changeLanguage('en')" class="language-button" style="background-color: #2980b9;">EN</button>
+    </div>
+
     <h1 data-translate="title">ŞEKER MİKTARI HESAPLAYICI</h1>
     <table>
         <tr>
@@ -181,6 +189,7 @@
     </table>
 
     <button onclick="sekerHesapla()" data-translate="calculate_button">Hesapla</button>
+    <div class="loader" id="loader"></div>
 
     <h1 data-translate="alcohol_title">ALKOL DEĞERİ HESAPLAMA</h1>
     <table>
@@ -199,8 +208,9 @@
     </table>
 
     <button onclick="alkolHesapla()" data-translate="calculate_button">Hesapla</button>
+    <div class="loader" id="loader2"></div>
 
-    <p data-translate="twitter_text">Twitter: @_ilhanakdeniz_</p>
+    <p data-translate="twitter_text">djmaster35@gmail.com</p>
 
     <script>
         var languages = {
@@ -217,7 +227,7 @@
                 'initial_density_label': 'İLK YOĞUNLUK',
                 'final_density_label': 'SON YOĞUNLUK',
                 'alcohol_label': 'ALKOL DEĞERİ',
-                'twitter_text': 'Twitter: @_ilhanakdeniz_'
+                'twitter_text': 'djmaster35@gmail.com'
             },
             'en': {
                 'title': 'SUGAR CALCULATOR',
@@ -232,7 +242,7 @@
                 'initial_density_label': 'INITIAL DENSITY',
                 'final_density_label': 'FINAL DENSITY',
                 'alcohol_label': 'ALCOHOL VALUE',
-                'twitter_text': 'Twitter: @_ilhanakdeniz_'
+                'twitter_text': 'djmaster35@gmail.com'
             }
         };
 
@@ -249,46 +259,62 @@
         }
 
         function sekerHesapla() {
-            var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
-            var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
-            var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
-            var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
-            sekerMiktari = Math.round(sekerMiktari);
-            var sekerSonuc = document.getElementById("seker-miktari");
+            showLoader('loader');
+            setTimeout(() => {
+                var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
+                var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
+                var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
+                var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
+                sekerMiktari = Math.round(sekerMiktari);
+                var sekerSonuc = document.getElementById("seker-miktari");
 
-            sekerSonuc.style.display = "inline-block";
-            var opacity = 0;
-            var timer = setInterval(function () {
-                if (opacity >= 1) {
-                    clearInterval(timer);
-                }
-                sekerSonuc.style.opacity = opacity;
-                opacity += 0.1;
-            }, 100);
-            sekerSonuc.innerHTML = '<strong>' + sekerMiktari + " GR</strong>";
+                sekerSonuc.style.display = "inline-block";
+                var opacity = 0;
+                var timer = setInterval(function () {
+                    if (opacity >= 1) {
+                        clearInterval(timer);
+                    }
+                    sekerSonuc.style.opacity = opacity;
+                    opacity += 0.1;
+                }, 100);
+                sekerSonuc.innerHTML = '<strong>' + sekerMiktari + " GR</strong>";
+                hideLoader('loader');
+            }, 1000);
         }
 
         function alkolHesapla() {
-            var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
-            var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
-            var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
-            alkolDegeri = Math.round(alkolDegeri * 100) / 100;
-            var alkolSonuc = document.getElementById("alkol-degeri");
+            showLoader('loader2');
+            setTimeout(() => {
+                var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
+                var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
+                var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
+                alkolDegeri = Math.round(alkolDegeri * 100) / 100;
+                var alkolSonuc = document.getElementById("alkol-degeri");
 
-            alkolSonuc.style.display = "inline-block";
-            var opacity = 0;
-            var timer = setInterval(function () {
-                if (opacity >= 1) {
-                    clearInterval(timer);
-                }
-                alkolSonuc.style.opacity = opacity;
-                opacity += 0.1;
-            }, 100);
-            alkolSonuc.innerHTML = '<strong>%' + alkolDegeri + '</strong>';
+                alkolSonuc.style.display = "inline-block";
+                var opacity = 0;
+                var timer = setInterval(function () {
+                    if (opacity >= 1) {
+                        clearInterval(timer);
+                    }
+                    alkolSonuc.style.opacity = opacity;
+                    opacity += 0.1;
+                }, 100);
+                alkolSonuc.innerHTML = '<strong>%' + alkolDegeri + '</strong>';
+                hideLoader('loader2');
+            }, 1000);
         }
 
         function setDeger(deger) {
             document.getElementById("olmasi-gereken-deger").value = deger;
+        }
+
+        function showLoader(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function hideLoader(id) {
+            document.getElementById(id).style.display = 'none';
         }
     </script>
 </body>
