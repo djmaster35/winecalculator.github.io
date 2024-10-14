@@ -4,319 +4,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate="title">ŞEKER MİKTARI HESAPLAYICI</title>
+    <title>ŞARAP YAPIMI HESAPLAYICI</title>
     <style>
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Helvetica Neue', sans-serif;
-        }
-
-        :root {
-            --bg-color: #f7f7f7;
-            --primary-color: #3498db;
-            --secondary-color: #e74c3c;
-            --text-color: #333333;
-            --loading-color: #2980b9;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-size: 16px;
-            line-height: 1.6;
-            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
             margin: 0;
-            padding: 0 20px;
+            padding: 0;
+            text-align: center;
         }
 
         h1 {
             margin: 20px 0;
-            font-size: 22px;
-            color: var(--primary-color);
-        }
-
-        p {
-            margin-top: 20px;
+            font-size: 24px;
+            color: #ecf0f1; /* Off-White */
         }
 
         table {
-            width: 100%;
+            width: 80%;
             max-width: 400px;
             margin: 20px auto;
             border-collapse: collapse;
-            border-radius: 5px;
-            overflow: hidden;
+            background-color: #2c3e50; /* Dark Grayish Blue */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
             padding: 10px;
-            border: 1px solid var(--primary-color);
+            border: 1px solid #34495e; /* Dark Blue Gray */
         }
 
         th {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: #34495e; /* Dark Blue Gray */
+            color: #ecf0f1; /* Off-White */
         }
 
         input[type="number"] {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 8px;
-            border: 1px solid var(--primary-color);
+            margin: 10px;
+            border: 1px solid #34495e; /* Dark Blue Gray */
             border-radius: 5px;
             font-size: 14px;
+            color: #2c3e50; /* Dark Grayish Blue */
         }
 
         button {
-            display: block;
-            width: 80%;
-            max-width: 100px;
-            margin: 20px auto;
+            width: calc(100% - 20px);
             padding: 12px;
+            margin: 20px 10px;
             border: none;
             border-radius: 5px;
-            background-color: var(--secondary-color);
-            color: white;
+            background-color: #7f8c8d; /* Grayish */
+            color: #ecf0f1; /* Off-White */
             font-size: 14px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            /* 3D effect with box-shadow */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         button:hover {
-            background-color: #c0392b;
-        }
-
-        .small-button {
-            display: inline-block;
-            width: auto;
-            margin: 5px;
-            padding: 6px 10px;
-            font-size: 12px;
+            background-color: #95a5a6; /* Light Grayish */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .result {
             display: none;
-            opacity: 0;
-            transition: opacity 1s;
             font-size: 18px;
-            color: var(--primary-color);
+            color: #3498db; /* Soft Blue */
             margin-top: 10px;
         }
 
-        .language-buttons {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .language-button {
-            display: inline-block;
-            margin-right: 5px;
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .language-button:hover {
-            background-color: var(--loading-color);
-        }
-
-        .loader {
+        #alkol-seyretme {
             display: none;
-            border: 4px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 4px solid var(--loading-color);
-            width: 24px;
-            height: 24px;
-            margin: 0 auto;
-            animation: spin 2s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media screen and (max-width: 600px) {
-            table, button {
-                width: 95%;
+        @media only screen and (max-width: 600px) {
+            table {
+                width: 100%;
             }
 
             h1 {
-                font-size: 28px;
+                font-size: 18px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="language-buttons">
-        <button onclick="changeLanguage('tr')" class="language-button" style="background-color: #2980b9;">TR</button>
-        <button onclick="changeLanguage('en')" class="language-button" style="background-color: #2980b9;">EN</button>
+    <!-- Şarap Yapımı Hesaplama -->
+    <div id="sarap-hesaplama">
+        <h1>ŞARAP YAPIMI HESAPLAYICI</h1>
+        <table>
+            <tr>
+                <th>MEYVE SUYU (Litre)</th>
+                <td><input id="meyve-suyu-miktari" type="number" value="1"></td>
+            </tr>
+            <tr>
+                <th>YOĞUNLUK DEĞERİ</th>
+                <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
+            </tr>
+            <tr>
+                <th>OLMASI İSTENEN YOĞUNLUK</th>
+                <td>
+                    <input id="olmasi-gereken-deger" type="number" value="1100">
+                    <br>
+                    <button onclick="setDeger(1080)">Ekmek Mayası</button>
+                    <button onclick="setDeger(1100)">Şarap Mayası</button>
+                </td>
+            </tr>
+            <tr>
+                <th>ŞEKER MİKTARI</th>
+                <td><span id="seker-miktari" class="result"></span></td>
+            </tr>
+        </table>
+
+        <button onclick="sekerHesapla()">Hesapla Şeker Miktarı</button>
+
+        <h1>ALKOL DEĞERİ HESAPLAMA</h1>
+        <table>
+            <tr>
+                <th>İLK YOĞUNLUK</th>
+                <td><input id="ilk-yogunluk" type="number" value="1100"></td>
+            </tr>
+            <tr>
+                <th>SON YOĞUNLUK</th>
+                <td><input id="son-yogunluk" type="number" value="1000"></td>
+            </tr>
+            <tr>
+                <th>ALKOL DEĞERİ</th>
+                <td><span id="alkol-degeri" class="result"></span></td>
+            </tr>
+        </table>
+
+        <button onclick="alkolHesapla()">Hesapla Alkol Değeri</button>
+
+        <h2><a href="#" style="color: #3498db;" onclick="toggleAlkolSeyretme()">Alkol Seyreltme Hesaplamasını Aç</a></h2>
     </div>
 
-    <h1 data-translate="title">ŞEKER MİKTARI HESAPLAYICI</h1>
-    <table>
-        <tr>
-            <th data-translate="fruit_juice_label">MEYVE SUYU (Litre)</th>
-            <td><input id="meyve-suyu-miktari" type="number" value="1"></td>
-        </tr>
-        <tr>
-            <th data-translate="density_label">YOĞUNLUK DEĞERİ</th>
-            <td><input id="meyve-suyu-yogunluk" type="number" value="1046"></td>
-        </tr>
-        <tr>
-            <th>
-                <span data-translate="desired_density_label">OLMASI İSTENEN YOĞUNLUK</span>
-                <br>
-                <button type="button" class="small-button" onclick="setDeger(1080)" data-translate="bread_yeast_button">Ekmek Mayası</button>
-                <button type="button" class="small-button" onclick="setDeger(1100)" data-translate="wine_yeast_button">Şarap Mayası</button>
-            </th>
-            <td>
-                <input id="olmasi-gereken-deger" type="number" value="1100">
-            </td>
-        </tr>
-        <tr>
-            <th data-translate="sugar_label">ŞEKER MİKTARI</th>
-            <td><span id="seker-miktari" class="result"></span></td>
-        </tr>
-    </table>
+    <!-- Alkol Seyreltme Hesaplama -->
+    <div id="alkol-seyretme">
+        <h2>Alkol Seyreltme ve Rakı Hesaplama</h2>
 
-    <button onclick="sekerHesapla()" data-translate="calculate_button">Hesapla</button>
-    <div class="loader" id="loader"></div>
+        <h3>Alkol Derecesi</h3>
+        <label for="alkolDerecesi">Alkol Derecesi (%):</label>
+        <input type="number" id="alkolDerecesi" value="96">
+        <br>
 
-    <h1 data-translate="alcohol_title">ALKOL DEĞERİ HESAPLAMA</h1>
-    <table>
-        <tr>
-            <th data-translate="initial_density_label">İLK YOĞUNLUK</th>
-            <td><input id="ilk-yogunluk" type="number" value="1100"></td>
-        </tr>
-        <tr>
-            <th data-translate="final_density_label">SON YOĞUNLUK</th>
-            <td><input id="son-yogunluk" type="number" value="1000"></td>
-        </tr>
-        <tr>
-            <th data-translate="alcohol_label">ALKOL DEĞERİ</th>
-            <td><span id="alkol-degeri" class="result"></span></td>
-        </tr>
-    </table>
+        <h3>1. Etil Alkol Miktarına Göre Hesaplama</h3>
+        <label for="etilAlkol">Etil Alkol (ml):</label>
+        <input type="number" id="etilAlkol" value="500">
+        <button onclick="hesaplaAlkol()">Hesapla</button>
 
-    <button onclick="alkolHesapla()" data-translate="calculate_button">Hesapla</button>
-    <div class="loader" id="loader2"></div>
+        <p id="sonuc1"></p>
 
-    <p data-translate="twitter_text">djmaster35@gmail.com</p>
+        <h3>2. 500 ml Rakı Elde Etmek İçin Hesaplama</h3>
+        <label for="hedefRaki">Hedef Rakı Miktarı (ml):</label>
+        <input type="number" id="hedefRaki" value="500">
+        <button onclick="hesaplaRaki()">Hesapla</button>
+
+        <p id="sonuc2"></p>
+
+        <h3>3. İstediğiniz Alkol Derecesine Göre Hesaplama</h3>
+        <label for="hedefAlkolDerecesi">Hedef Alkol Derecesi (%):</label>
+        <input type="number" id="hedefAlkolDerecesi" value="45">
+        <br>
+        <label for="hedefHacim">Hedef Hacim (ml):</label>
+        <input type="number" id="hedefHacim" value="1000">
+        <button onclick="hesaplaHedefAlkol()">Hesapla</button>
+
+        <p id="sonuc3"></p>
+
+        <button onclick="geriDon()">Şarap Hesaplamasına Geri Dön</button>
+    </div>
 
     <script>
-        var languages = {
-            'tr': {
-                'title': 'ŞEKER MİKTARI HESAPLAYICI',
-                'fruit_juice_label': 'MEYVE SUYU (Litre)',
-                'density_label': 'YOĞUNLUK DEĞERİ',
-                'desired_density_label': 'OLMASI İSTENEN YOĞUNLUK',
-                'bread_yeast_button': 'Ekmek Mayası',
-                'wine_yeast_button': 'Şarap Mayası',
-                'sugar_label': 'ŞEKER MİKTARI',
-                'calculate_button': 'Hesapla',
-                'alcohol_title': 'ALKOL DEĞERİ HESAPLAMA',
-                'initial_density_label': 'İLK YOĞUNLUK',
-                'final_density_label': 'SON YOĞUNLUK',
-                'alcohol_label': 'ALKOL DEĞERİ',
-                'twitter_text': 'djmaster35@gmail.com'
-            },
-            'en': {
-                'title': 'SUGAR CALCULATOR',
-                'fruit_juice_label': 'FRUIT JUICE (Liters)',
-                'density_label': 'DENSITY VALUE',
-                'desired_density_label': 'DESIRED DENSITY',
-                'bread_yeast_button': 'Bread Yeast',
-                'wine_yeast_button': 'Wine Yeast',
-                'sugar_label': 'SUGAR AMOUNT',
-                'calculate_button': 'Calculate',
-                'alcohol_title': 'ALCOHOL VALUE CALCULATOR',
-                'initial_density_label': 'INITIAL DENSITY',
-                'final_density_label': 'FINAL DENSITY',
-                'alcohol_label': 'ALCOHOL VALUE',
-                'twitter_text': 'djmaster35@gmail.com'
-            }
-        };
-
-        function changeLanguage(lang) {
-            var elements = document.querySelectorAll('[data-translate]');
-            var langData = languages[lang];
-
-            elements.forEach(function (element) {
-                var key = element.getAttribute('data-translate');
-                if (langData.hasOwnProperty(key)) {
-                    element.innerHTML = langData[key];
-                }
-            });
-        }
-
         function sekerHesapla() {
-            showLoader('loader');
-            setTimeout(() => {
-                var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
-                var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
-                var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
-                var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
-                sekerMiktari = Math.round(sekerMiktari);
-                var sekerSonuc = document.getElementById("seker-miktari");
+            var meyveSuyuMiktari = parseFloat(document.getElementById("meyve-suyu-miktari").value);
+            var meyveSuyuYogunluk = parseFloat(document.getElementById("meyve-suyu-yogunluk").value);
+            var olmasiGerekenDeger = parseFloat(document.getElementById("olmasi-gereken-deger").value);
 
-                sekerSonuc.style.display = "inline-block";
-                var opacity = 0;
-                var timer = setInterval(function () {
-                    if (opacity >= 1) {
-                        clearInterval(timer);
-                    }
-                    sekerSonuc.style.opacity = opacity;
-                    opacity += 0.1;
-                }, 100);
-                sekerSonuc.innerHTML = '<strong>' + sekerMiktari + " GR</strong>";
-                hideLoader('loader');
-            }, 1000);
-        }
+            var sekerMiktari = (olmasiGerekenDeger - meyveSuyuYogunluk) * 3 * meyveSuyuMiktari;
+            sekerMiktari = Math.round(sekerMiktari);
 
-        function alkolHesapla() {
-            showLoader('loader2');
-            setTimeout(() => {
-                var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
-                var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
-                var alkolDegeri = (ilkYogunluk - sonYogunluk) * 0.136;
-                alkolDegeri = Math.round(alkolDegeri * 100) / 100;
-                var alkolSonuc = document.getElementById("alkol-degeri");
-
-                alkolSonuc.style.display = "inline-block";
-                var opacity = 0;
-                var timer = setInterval(function () {
-                    if (opacity >= 1) {
-                        clearInterval(timer);
-                    }
-                    alkolSonuc.style.opacity = opacity;
-                    opacity += 0.1;
-                }, 100);
-                alkolSonuc.innerHTML = '<strong>%' + alkolDegeri + '</strong>';
-                hideLoader('loader2');
-            }, 1000);
+            var sekerSonuc = document.getElementById("seker-miktari");
+            sekerSonuc.style.display = "block";
+            sekerSonuc.innerHTML = '<strong>' + sekerMiktari + '</strong> gram şeker eklemeniz gerekiyor.';
         }
 
         function setDeger(deger) {
             document.getElementById("olmasi-gereken-deger").value = deger;
         }
 
-        function showLoader(id) {
-            document.getElementById(id).style.display = 'block';
+        function alkolHesapla() {
+            var ilkYogunluk = parseFloat(document.getElementById("ilk-yogunluk").value);
+            var sonYogunluk = parseFloat(document.getElementById("son-yogunluk").value);
+
+            var alkolDegeri = (ilkYogunluk - sonYogunluk) / 7.5;
+            alkolDegeri = Math.round(alkolDegeri * 10) / 10;
+
+            var alkolSonuc = document.getElementById("alkol-degeri");
+            alkolSonuc.style.display = "block";
+            alkolSonuc.innerHTML = '<strong>' + alkolDegeri + '%</strong> alkol oranına sahipsiniz.';
+
+            yorumYap(alkolDegeri);
         }
 
-        function hideLoader(id) {
-            document.getElementById(id).style.display = 'none';
+        function yorumYap(alkolDegeri) {
+            var yorum = "";
+            if (alkolDegeri < 5) {
+                yorum = "Bu çok düşük bir alkol oranı. Daha fazla şeker ekleyerek veya daha uzun süre mayalayarak alkol oranını artırabilirsiniz.";
+            } else if (alkolDegeri < 10) {
+                yorum = "Bu ortalama bir alkol oranı. Hafif ve lezzetli bir şarap elde etmiş olabilirsiniz.";
+            } else if (alkolDegeri < 15) {
+                yorum = "Bu yüksek bir alkol oranı. Güçlü ve aromalı bir şarap elde etmiş olabilirsiniz.";
+            } else {
+                yorum = "Bu çok yüksek bir alkol oranı. Şarabınızın tadı acı ve keskin olabilir. Daha az şeker ekleyerek veya daha kısa süre mayalayarak alkol oranını düşürebilirsiniz.";
+            }
+
+            var alkolSonuc = document.getElementById("alkol-degeri");
+            alkolSonuc.style.display = "block";
+            alkolSonuc.innerHTML += '<br><strong>' + yorum + '</strong>';
+        }
+
+        function toggleAlkolSeyretme() {
+            document.getElementById("sarap-hesaplama").style.display = "none";
+            document.getElementById("alkol-seyretme").style.display = "block";
+        }
+
+        function geriDon() {
+            document.getElementById("sarap-hesaplama").style.display = "block";
+            document.getElementById("alkol-seyretme").style.display = "none";
+        }
+
+        function hesaplaAlkol() {
+            let etilAlkol = parseFloat(document.getElementById("etilAlkol").value);
+            let alkolDerecesi = parseFloat(document.getElementById("alkolDerecesi").value);
+            let su = (etilAlkol * 1300) / 1000;
+            let anason = (etilAlkol * 3) / 1000;
+            let toplamHacim = etilAlkol + su;
+            let alkolOrani = (etilAlkol * alkolDerecesi) / toplamHacim;
+
+            document.getElementById("sonuc1").innerHTML = `
+                Su: ${su.toFixed(2)} ml<br>
+                Anason yağı: ${anason.toFixed(2)} ml<br>
+                Tahmini Alkol Oranı: ${alkolOrani.toFixed(2)}%
+            `;
+        }
+
+        function hesaplaRaki() {
+            let hedefRaki = parseFloat(document.getElementById("hedefRaki").value);
+            let alkolDerecesi = parseFloat(document.getElementById("alkolDerecesi").value);
+            let etilAlkol = (hedefRaki * 1000) / (1300 + 1000);
+            let su = (etilAlkol * 1300) / 1000;
+            let anason = (etilAlkol * 3) / 1000;
+            let alkolOrani = (etilAlkol * alkolDerecesi) / hedefRaki;
+
+            document.getElementById("sonuc2").innerHTML = `
+                Etil Alkol: ${etilAlkol.toFixed(2)} ml<br>
+                Su: ${su.toFixed(2)} ml<br>
+                Anason yağı: ${anason.toFixed(2)} ml<br>
+                Tahmini Alkol Oranı: ${alkolOrani.toFixed(2)}%
+            `;
+        }
+
+        function hesaplaHedefAlkol() {
+            let hedefAlkolDerecesi = parseFloat(document.getElementById("hedefAlkolDerecesi").value);
+            let hedefHacim = parseFloat(document.getElementById("hedefHacim").value);
+            let alkolDerecesi = parseFloat(document.getElementById("alkolDerecesi").value);
+            let gerekliEtilAlkol = (hedefAlkolDerecesi * hedefHacim) / alkolDerecesi;
+            let gerekliSu = hedefHacim - gerekliEtilAlkol;
+
+            document.getElementById("sonuc3").innerHTML = `
+                Gerekli Etil Alkol: ${gerekliEtilAlkol.toFixed(2)} ml<br>
+                Gerekli Su: ${gerekliSu.toFixed(2)} ml<br>
+                Anason yağı: ${(gerekliEtilAlkol * 3 / 1000).toFixed(2)} ml
+            `;
         }
     </script>
 </body>
 
 </html>
+
