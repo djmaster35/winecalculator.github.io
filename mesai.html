@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline Mesai Takip Sistemi</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #1e90ff; /* Canlı mavi */
+      --secondary-color: #6c757d; /* Gri ton */
+      --success-color: #28a745; /* Yeşil */
+      --danger-color: #dc3545; /* Kırmızı */
+      --warning-color: #f39c12; /* Turuncu */
+      --light-color: #f8f9fa; /* Açık gri */
+      --dark-color: #2c3e50; /* Koyu mavi-gri */
+      --background-color: #ecf0f1; /* Hafif gri arka plan */
+      --card-bg: #ffffff; /* Kart arka planı */
+      --shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-color);
+      color: var(--dark-color);
+      padding-top: 80px;
+      transition: var(--transition);
+    }
+
+    .container {
+      max-width: 1100px;
+      padding: 20px;
+      margin: 0 auto;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+      box-shadow: var(--shadow);
+      padding: 15px 20px;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--light-color);
+      transition: var(--transition);
+    }
+
+    .navbar-brand:hover {
+      color: #fff;
+    }
+
+    .nav-link {
+      color: var(--light-color);
+      font-weight: 500;
+      margin-left: 15px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Kartlar */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      background: var(--primary-color);
+      color: var(--light-color);
+      padding: 15px 20px;
+      font-weight: 600;
+      border-bottom: none;
+      border-radius: 15px 15px 0 0;
+    }
+
+    /* Butonlar */
+    .btn {
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: #0069d9;
+      border-color: #0062cc;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      border-color: var(--success-color);
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      border-color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      transform: translateY(-2px);
+    }
+
+    .btn-warning {
+      background-color: var(--warning-color);
+      border-color: var(--warning-color);
+      color: var(--dark-color);
+    }
+
+    .btn-warning:hover {
+      background-color: #e08e0b;
+      transform: translateY(-2px);
+    }
+
+    /* Tablo */
+    .table {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table th {
+      background-color: var(--light-color);
+      color: var(--dark-color);
+      font-weight: 600;
+    }
+
+    .pazar-gunu {
+      background-color: rgba(243, 156, 18, 0.2);
+    }
+
+    .active-week {
+      background-color: rgba(var(--primary-color), 0.15);
+      font-weight: bold;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    /* Animasyonlar */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: slideIn 0.5s ease-out forwards;
+    }
+
+    /* İşlemler Menüsü */
+    .actions-column {
+      display: none;
+    }
+
+    .actions-visible .actions-column {
+      display: table-cell;
+    }
+
+    /* Mobil Uyumluluk */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 60px;
+      }
+
+      .navbar {
+        padding: 10px 15px;
+      }
+
+      .navbar-brand {
+        font-size: 1.2rem;
+      }
+
+      .nav-link {
+        margin-left: 10px;
+        font-size: 0.9rem;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      .card {
+        margin-bottom: 15px;
+      }
+
+      .card-header {
+        font-size: 1rem;
+        padding: 12px 15px;
+      }
+
+      .btn {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+      }
+
+      .table {
+        font-size: 0.85rem;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .col-md-4, .col-md-3, .col-md-5, .col-md-6 {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar-nav {
+        text-align: center;
+      }
+
+      .btn {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .card-header h5 {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Mesai Takip</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Menüyü aç">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#setupScreen">Kurulum</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#mainApp">Ana Sayfa</a>
+          </li>
+          <li class="nav-item">
+            <button id="toggleUserPanelBtn" class="btn btn-outline-light btn-sm ms-2">Kullanıcı Paneli</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Kullanıcı Paneli -->
+  <div id="userPanel" class="container my-3" style="display: none;">
+    <div class="card">
+      <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">Kullanıcı Paneli</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <h6>Veri İşlemleri</h6>
+          <button id="backupBtnPanel" class="btn btn-outline-secondary btn-sm me-1">
+            <i class="fas fa-download me-1"></i>Yedek Al
+          </button>
+          <button id="restoreBtnPanel" class="btn btn-outline-secondary btn-sm me-1">
+            <i class="fas fa-upload me-1"></i>Yedekten Yükle
+          </button>
+          <button id="resetBtnPanel" class="btn btn-outline-danger btn-sm me-1">
+            <i class="fas fa-trash-alt me-1"></i>Verileri Sıfırla
+          </button>
+          <button id="logoutBtnPanel" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-sign-out-alt me-1"></i>Çıkış Yap
+          </button>
+        </div>
+        <div class="mb-0">
+          <button class="btn btn-info btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#helpSectionUserPanel" aria-expanded="false" aria-controls="helpSectionUserPanel">
+            Yardım
+          </button>
+          <div class="collapse mt-2" id="helpSectionUserPanel">
+            <div>
+              <ol class="small">
+                <li>Öncelikle, "Kurulum" bölümünden adınızı girerek uygulamayı başlatın.</li>
+                <li>Ana sayfada, yeni hafta oluşturabilir, mesai kayıtlarınızı ekleyebilirsiniz.</li>
+                <li>"Hafta Seçimi" bölümünden istediğiniz haftayı seçip detaylarını görüntüleyin.</li>
+                <li>Raporlar bölümünden haftalık veya tarih aralığı raporları oluşturabilirsiniz.</li>
+                <li>Kullanıcı Paneli üzerinden verilerinizi yedekleyebilir, yedeği yükleyebilir, tüm verileri sıfırlayabilir veya çıkış yapabilirsiniz.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container my-4">
+    <!-- Setup Screen -->
+    <div id="setupScreen" class="card fade-in" style="display: none;">
+      <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-user-cog me-2"></i>Kurulum</h5>
+      </div>
+      <div class="card-body">
+        <p>Mesai takip uygulamasını kullanabilmek için lütfen adınızı ve soyadınızı giriniz.</p>
+        <form id="setupForm">
+          <div class="mb-3">
+            <label for="userName" class="form-label">Adınız ve Soyadınız</label>
+            <input type="text" class="form-control" id="userName" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Kaydet ve Devam Et</button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Main App -->
+    <div id="mainApp" style="display: none;">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <h4 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Mesai Takip Sistemi</h4>
+            <button class="btn btn-info btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#helpSectionMain" aria-expanded="false" aria-controls="helpSectionMain">
+              Yardım
+            </button>
+          </div>
+          <div class="collapse mt-2" id="helpSectionMain">
+            <div>
+              <ol class="small">
+                <li>Öncelikle, "Kurulum" bölümünden adınızı girerek uygulamayı başlatın.</li>
+                <li>Ana sayfada, yeni hafta oluşturabilir, mesai kayıtlarınızı ekleyebilirsiniz.</li>
+                <li>"Hafta Seçimi" bölümünden istediğiniz haftayı seçip detaylarını görüntüleyin.</li>
+                <li>Raporlar bölümünden haftalık veya tarih aralığı raporları oluşturabilirsiniz.</li>
+                <li>Kullanıcı Paneli üzerinden verilerinizi yedekleyebilir, yedeği yükleyebilir veya tüm verileri sıfırlayabilirsiniz.</li>
+              </ol>
+            </div>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+              <h5 id="welcomeMessage" class="mb-0"></h5>
+              <small class="text-muted">Toplam <span id="totalWeeksCount">0</span> hafta, <span id="totalRecordsCount">0</span> kayıt</small>
+            </div>
+            <div>
+              Ascendancy <small class="text-muted">Son güncelleme: <span id="lastUpdateTime"></span></small>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Yeni Hafta Oluşturma -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Yeni Hafta Oluştur</h5>
+        </div>
+        <div class="card-body">
+          <form id="createWeekForm">
+            <div class="row g-2">
+              <div class="col-md-4">
+                <label class="form-label">Hafta Başlangıç Tarihi</label>
+                <input type="date" id="weekStartDate" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Hafta Aralığı (Otomatik)</label>
+                <input type="text" id="weekRange" class="form-control" readonly>
+              </div>
+              <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100">
+                  <i class="fas fa-calendar-plus me-1"></i>Hafta Oluştur
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Hafta Seçimi ve Mesai Kayıtları -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0"><i class="fas fa-calendar-week me-2"></i>Hafta Seçimi ve Mesai Kayıtları</h5>
+          <div>
+            <select id="yearFilter" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+              <!-- Yıllar JavaScript ile doldurulacak -->
+            </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div id="weeksList" class="list-group" style="max-height: 200px; overflow-y: auto;"></div>
+          </div>
+          <div id="currentWeekInfo" class="alert alert-info" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong id="currentWeekTitle"></strong>
+                <div id="currentWeekStats" class="small"></div>
+              </div>
+              <div>
+                <button id="editWeekBtn" class="btn btn-sm btn-warning me-1">
+                  <i class="fas fa-edit"></i> Düzenle
+                </button>
+                <button id="deleteWeekBtn" class="btn btn-sm btn-danger">
+                  <i class="fas fa-trash"></i> Sil
+                </button>
+              </div>
+            </div>
+          </div>
+          <form id="addRecordForm" style="display: none;">
+            <div class="row g-2 mb-3">
+              <div class="col-md-3">
+                <label class="form-label">Tarih</label>
+                <input type="date" id="recordDate" class="form-control" required>
+              </div>
+              <div class="col-md-5">
+                <label class="form-label">Açıklama</label>
+                <input type="text" id="recordDescription" class="form-control" placeholder="Örn: Ofiste çalışma" required>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Saat</label>
+                <input type="number" id="recordHours" class="form-control" min="0" step="0.5">
+              </div>
+              <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="fas fa-plus"></i> Ekle
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="d-flex justify-content-end mb-2">
+            <button id="toggleActionsBtn" class="btn btn-sm btn-outline-secondary" style="display: none;">
+              <i class="fas fa-cog"></i> İşlemleri Göster/Gizle
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover table-sm" id="recordsTable">
+              <thead>
+                <tr>
+                  <th>Tarih</th>
+                  <th>Açıklama</th>
+                  <th>Saat</th>
+                  <th class="actions-column">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody id="recordsTableBody"></tbody>
+              <tfoot id="recordsTableFooter" style="display: none;"></tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Raporlar -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Raporlar</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0"><i class="fas fa-calendar-day me-1"></i>Haftalık Rapor</h6>
+                </div>
+                <div class="card-body">
+                  <div id="weeklyReport" class="small" style="white-space: pre-line;"></div>
+                  <div class="mt-2">
+                    <button id="copyWeeklyReportBtn" class="btn btn-sm btn-outline-primary me-1">
+                      <i class="fas fa-copy"></i> Kopyala
+                    </button>
+                    <button id="downloadWeeklyReportBtn" class="btn btn-sm btn-outline-success me-1">
+                      <i class="fas fa-download"></i> İndir
+                    </button>
+                    <button id="shareWeeklyReportBtn" class="btn btn-sm btn-outline-success">
+                      <i class="fas fa-share-alt"></i> WhatsApp'ta Paylaş
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0"><i class="fas fa-calendar-range me-1"></i>Tarih Aralığı Raporu</h6>
+                </div>
+                <div class="card-body">
+                  <form id="dateRangeReportForm">
+                    <div class="row g-2 mb-3">
+                      <div class="col-md-6">
+                        <label class="form-label">Başlangıç Tarihi</label>
+                        <input type="date" id="reportStartDate" class="form-control" required>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="form-label">Bitiş Tarihi</label>
+                        <input type="date" id="reportEndDate" class="form-control" required>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-2">
+                      <i class="fas fa-search"></i> Rapor Oluştur
+                    </button>
+                  </form>
+                  <div id="dateRangeReport" class="small" style="white-space: pre-line;"></div>
+                  <div class="mt-2">
+                    <button id="copyDateRangeReportBtn" class="btn btn-sm btn-outline-primary me-1">
+                      <i class="fas fa-copy"></i> Kopyala
+                    </button>
+                    <button id="downloadDateRangeReportBtn" class="btn btn-sm btn-outline-success me-1">
+                      <i class="fas fa-download"></i> İndir
+                    </button>
+                    <button id="shareDateRangeReportBtn" class="btn btn-sm btn-outline-success">
+                      <i class="fas fa-share-alt"></i> WhatsApp'ta Paylaş
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Week Modal -->
+  <div class="modal fade" id="editWeekModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Haftayı Düzenle</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <form id="editWeekForm">
+          <div class="modal-body">
+            <input type="hidden" id="editWeekId">
+            <div class="mb-3">
+              <label class="form-label">Hafta Başlangıç Tarihi</label>
+              <input type="date" id="editWeekStartDate" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Hafta Aralığı</label>
+              <input type="text" id="editWeekRange" class="form-control" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Edit Record Modal -->
+  <div class="modal fade" id="editRecordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Kaydı Düzenle</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <form id="editRecordForm">
+          <div class="modal-body">
+            <input type="hidden" id="editRecordId">
+            <div class="mb-3">
+              <label class="form-label">Tarih</label>
+              <input type="date" id="editRecordDate" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Açıklama</label>
+              <input type="text" id="editRecordDescription" class 
+   
+="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Saat</label>
+              <input type="number" id="editRecordHours" class="form-control" min="0" step="0.5" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Uygulama veri yapısı
+    const appData = {
+      user: null,
+      weeks: [],
+      records: [],
+      currentWeekId: null,
+      lastUpdate: new Date()
+    };
+    
+    // DOM Elemanları
+    const setupScreen = document.getElementById('setupScreen');
+    const mainApp = document.getElementById('mainApp');
+    const setupForm = document.getElementById('setupForm');
+    const userNameInput = document.getElementById('userName');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const totalWeeksCount = document.getElementById('totalWeeksCount');
+    const totalRecordsCount = document.getElementById('totalRecordsCount');
+    const lastUpdateTime = document.getElementById('lastUpdateTime');
+    const createWeekForm = document.getElementById('createWeekForm');
+    const weekStartDateInput = document.getElementById('weekStartDate');
+    const weekRangeInput = document.getElementById('weekRange');
+    const weeksList = document.getElementById('weeksList');
+    const yearFilter = document.getElementById('yearFilter');
+    const currentWeekInfo = document.getElementById('currentWeekInfo');
+    const currentWeekTitle = document.getElementById('currentWeekTitle');
+    const currentWeekStats = document.getElementById('currentWeekStats');
+    const editWeekBtn = document.getElementById('editWeekBtn');
+    const deleteWeekBtn = document.getElementById('deleteWeekBtn');
+    const addRecordForm = document.getElementById('addRecordForm');
+    const recordDateInput = document.getElementById('recordDate');
+    const recordDescriptionInput = document.getElementById('recordDescription');
+    const recordHoursInput = document.getElementById('recordHours');
+    const recordsTable = document.getElementById('recordsTable');
+    const recordsTableBody = document.getElementById('recordsTableBody');
+    const recordsTableFooter = document.getElementById('recordsTableFooter');
+    const toggleActionsBtn = document.getElementById('toggleActionsBtn');
+    const weeklyReport = document.getElementById('weeklyReport');
+    const copyWeeklyReportBtn = document.getElementById('copyWeeklyReportBtn');
+    const downloadWeeklyReportBtn = document.getElementById('downloadWeeklyReportBtn');
+    const shareWeeklyReportBtn = document.getElementById('shareWeeklyReportBtn');
+    const dateRangeReportForm = document.getElementById('dateRangeReportForm');
+    const reportStartDateInput = document.getElementById('reportStartDate');
+    const reportEndDateInput = document.getElementById('reportEndDate');
+    const dateRangeReport = document.getElementById('dateRangeReport');
+    const copyDateRangeReportBtn = document.getElementById('copyDateRangeReportBtn');
+    const downloadDateRangeReportBtn = document.getElementById('downloadDateRangeReportBtn');
+    const shareDateRangeReportBtn = document.getElementById('shareDateRangeReportBtn');
+    const backupBtnPanel = document.getElementById('backupBtnPanel');
+    const restoreBtnPanel = document.getElementById('restoreBtnPanel');
+    const resetBtnPanel = document.getElementById('resetBtnPanel');
+    const logoutBtnPanel = document.getElementById('logoutBtnPanel');
+    const toggleUserPanelBtn = document.getElementById('toggleUserPanelBtn');
+    const userPanel = document.getElementById('userPanel');
+    const editWeekModal = new bootstrap.Modal(document.getElementById('editWeekModal'));
+    const editWeekForm = document.getElementById('editWeekForm');
+    const editWeekIdInput = document.getElementById('editWeekId');
+    const editWeekStartDateInput = document.getElementById('editWeekStartDate');
+    const editWeekRangeInput = document.getElementById('editWeekRange');
+    const editRecordModal = new bootstrap.Modal(document.getElementById('editRecordModal'));
+    const editRecordForm = document.getElementById('editRecordForm');
+    const editRecordIdInput = document.getElementById('editRecordId');
+    const editRecordDateInput = document.getElementById('editRecordDate');
+    const editRecordDescriptionInput = document.getElementById('editRecordDescription');
+    const editRecordHoursInput = document.getElementById('editRecordHours');
+    
+    // Uygulamayı başlatma
+    document.addEventListener('DOMContentLoaded', function() {
+      loadData();
+      if (!appData.user) {
+        showSetupScreen();
+      } else {
+        showMainApp();
+      }
+      setupEventListeners();
+    });
+    
+    function showSetupScreen() {
+      setupScreen.style.display = 'block';
+      mainApp.style.display = 'none';
+      userPanel.style.display = 'none';
+    }
+    
+    function showMainApp() {
+      setupScreen.style.display = 'none';
+      mainApp.style.display = 'block';
+      welcomeMessage.textContent = `Hoşgeldiniz, ${appData.user}`;
+      updateStatistics();
+      const today = new Date();
+      weekStartDateInput.valueAsDate = today;
+      updateWeekRange(today);
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      reportStartDateInput.valueAsDate = firstDay;
+      reportEndDateInput.valueAsDate = lastDay;
+      populateYearsFilter();
+      loadWeeksList();
+    }
+    
+    function setupEventListeners() {
+      setupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userName = userNameInput.value.trim();
+        if (userName) {
+          appData.user = userName;
+          appData.lastUpdate = new Date();
+          saveData();
+          showMainApp();
+        }
+      });
+      
+      weekStartDateInput.addEventListener('change', function() {
+        updateWeekRange(this.valueAsDate);
+      });
+      
+      createWeekForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        createWeek();
+      });
+      
+      addRecordForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        addRecord();
+      });
+      
+      editWeekBtn.addEventListener('click', openEditWeekModal);
+      deleteWeekBtn.addEventListener('click', deleteCurrentWeek);
+      editWeekForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveEditedWeek();
+      });
+      
+      editRecordForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveEditedRecord();
+      });
+      
+      yearFilter.addEventListener('change', loadWeeksList);
+      
+      toggleActionsBtn.addEventListener('click', function() {
+        recordsTable.classList.toggle('actions-visible');
+      });
+      
+      copyWeeklyReportBtn.addEventListener('click', copyWeeklyReport);
+      downloadWeeklyReportBtn.addEventListener('click', downloadWeeklyReport);
+      shareWeeklyReportBtn.addEventListener('click', shareWeeklyReportOnWhatsApp);
+      
+      dateRangeReportForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        generateDateRangeReport();
+      });
+      
+      copyDateRangeReportBtn.addEventListener('click', copyDateRangeReport);
+      downloadDateRangeReportBtn.addEventListener('click', downloadDateRangeReport);
+      shareDateRangeReportBtn.addEventListener('click', shareDateRangeReportOnWhatsApp);
+      
+      backupBtnPanel.addEventListener('click', backupData);
+      restoreBtnPanel.addEventListener('click', restoreData);
+      resetBtnPanel.addEventListener('click', resetData);
+      logoutBtnPanel.addEventListener('click', logout);
+      
+      toggleUserPanelBtn.addEventListener('click', function() {
+        userPanel.style.display = userPanel.style.display === 'none' || userPanel.style.display === '' ? 'block' : 'none';
+      });
+    }
+    
+    function logout() {
+      if (!confirm('Çıkış yapmak istediğinize emin misiniz? Verileriniz kaydedilecek ve kurulum ekranına döneceksiniz.')) return;
+      appData.user = null;
+      appData.lastUpdate = new Date();
+      saveData();
+      showSetupScreen();
+      userNameInput.value = '';
+    }
+    
+    function updateWeekRange(startDate) {
+      if (!startDate) return;
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 6);
+      const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+                          "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+      let rangeText = startDate.getMonth() === endDate.getMonth() ?
+        `${startDate.getDate()}-${endDate.getDate()} ${monthNames[startDate.getMonth()]} ${startDate.getFullYear()}` :
+        `${startDate.getDate()} ${monthNames[startDate.getMonth()]} - ${endDate.getDate()} ${monthNames[endDate.getMonth()]} ${endDate.getFullYear()}`;
+      weekRangeInput.value = rangeText;
+    }
+    
+    function createWeek() {
+      const startDate = weekStartDateInput.valueAsDate;
+      const range = weekRangeInput.value;
+      if (!startDate || !range) return;
+      
+      if (appData.weeks.some(w => new Date(w.startDate).getTime() === startDate.getTime())) {
+        alert('Bu tarihte başlayan bir hafta zaten var!');
+        return;
+      }
+      
+      const newWeek = {
+        id: generateId(),
+        startDate: startDate.toISOString(),
+        range: range,
+        createdAt: new Date().toISOString()
+      };
+      
+      appData.weeks.push(newWeek);
+      appData.lastUpdate = new Date();
+      appData.weeks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      appData.currentWeekId = newWeek.id;
+      
+      saveData();
+      loadWeeksList();
+      loadCurrentWeekRecords();
+      
+      createWeekForm.reset();
+      weekStartDateInput.valueAsDate = new Date();
+      updateWeekRange(new Date());
+    }
+    
+    function loadWeeksList() {
+      weeksList.innerHTML = '';
+      const selectedYear = yearFilter.value;
+      const filteredWeeks = selectedYear === 'all' ? appData.weeks : appData.weeks.filter(w => new Date(w.startDate).getFullYear().toString() === selectedYear);
+      
+      if (filteredWeeks.length === 0) {
+        weeksList.innerHTML = '<div class="list-group-item text-muted text-center">Henüz hafta eklenmedi</div>';
+        return;
+      }
+      
+      filteredWeeks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      filteredWeeks.forEach(week => {
+        const isCurrent = week.id === appData.currentWeekId;
+        const weekItem = document.createElement('button');
+        weekItem.className = `list-group-item list-group-item-action ${isCurrent ? 'active-week' : ''}`;
+        weekItem.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>${week.range}</strong>
+              <div class="small text-muted">${formatDate(week.createdAt)}</div>
+            </div>
+            <div class="badge bg-primary rounded-pill">${getWeekRecordCount(week.id)} kayıt</div>
+          </div>
+        `;
+        weekItem.addEventListener('click', () => selectWeek(week.id));
+        weeksList.appendChild(weekItem);
+      });
+    }
+    
+    function populateYearsFilter() {
+      yearFilter.innerHTML = '<option value="all">Tüm Yıllar</option>';
+      const years = new Set(appData.weeks.map(w => new Date(w.startDate).getFullYear().toString()));
+      Array.from(years).sort((a, b) => b - a).forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+      });
+      const currentYear = new Date().getFullYear().toString();
+      if (years.has(currentYear)) yearFilter.value = currentYear;
+    }
+    
+    function selectWeek(weekId) {
+      appData.currentWeekId = weekId;
+      saveData();
+      loadCurrentWeekRecords();
+      loadWeeksList();
+    }
+    
+    function loadCurrentWeekRecords() {
+      if (!appData.currentWeekId) {
+        currentWeekInfo.style.display = 'none';
+        addRecordForm.style.display = 'none';
+        recordsTableFooter.style.display = 'none';
+        toggleActionsBtn.style.display = 'none';
+        recordsTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Lütfen bir hafta seçin</td></tr>';
+        weeklyReport.textContent = '';
+        return;
+      }
+      
+      const week = appData.weeks.find(w => w.id === appData.currentWeekId);
+      if (!week) return;
+      
+      currentWeekTitle.textContent = week.range;
+      const weekRecords = appData.records.filter(r => r.weekId === week.id);
+      const totalHours = weekRecords.reduce((sum, r) => sum + (r.hours || 0), 0);
+      const sundayCount = weekRecords.filter(r => new Date(r.date).getDay() === 0).length;
+      
+      currentWeekStats.innerHTML = `
+        <span class="badge bg-primary">${weekRecords.length} kayıt</span>
+        <span class="badge bg-success">${totalHours} saat</span>
+        <span class="badge bg-warning text-dark">${sundayCount} pazar</span>
+      `;
+      currentWeekInfo.style.display = 'block';
+      
+      const weekStart = new Date(week.startDate);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekEnd.getDate() + 6);
+      recordDateInput.min = formatDateForInput(weekStart);
+      recordDateInput.max = formatDateForInput(weekEnd);
+      recordDateInput.value = formatDateForInput(weekStart);
+      addRecordForm.style.display = 'block';
+      
+      loadRecordsTable(weekRecords);
+      generateWeeklyReport(week, weekRecords);
+    }
+    
+    function loadRecordsTable(records) {
+      recordsTableBody.innerHTML = '';
+      if (records.length === 0) {
+        recordsTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Henüz kayıt eklenmedi</td></tr>';
+        recordsTableFooter.style.display = 'none';
+        toggleActionsBtn.style.display = 'none';
+        return;
+      }
+      
+      toggleActionsBtn.style.display = 'block';
+      let totalHours = 0, sundayCount = 0;
+      records.sort((a, b) => new Date(a.date) - new Date(b.date));
+      records.forEach(record => {
+        const recordDate = new Date(record.date);
+        const isSunday = recordDate.getDay() === 0;
+        if (isSunday) sundayCount++;
+        totalHours += record.hours || 0;
+        
+        const row = document.createElement('tr');
+        if (isSunday) row.classList.add('pazar-gunu');
+        row.innerHTML = `
+          <td>${formatDate(record.date)}${isSunday ? ' (Pazar)' : ''}</td>
+          <td>${record.description}</td>
+          <td>${record.hours || 0} saat</td>
+          <td class="actions-column">
+            <button class="btn btn-sm btn-outline-primary edit-record-btn" data-id="${record.id}">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger delete-record-btn" data-id="${record.id}">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        recordsTableBody.appendChild(row);
+      });
+      
+      document.querySelectorAll('.edit-record-btn').forEach(btn => btn.addEventListener('click', () => openEditRecordModal(btn.dataset.id)));
+      document.querySelectorAll('.delete-record-btn').forEach(btn => btn.addEventListener('click', () => deleteRecord(btn.dataset.id)));
+      
+      recordsTableFooter.innerHTML = `
+        <tr class="table-light">
+          <td colspan="2"><strong>Toplam</strong></td>
+          <td><strong>${totalHours} saat</strong></td>
+          <td></td>
+        </tr>
+        <tr class="table-light">
+          <td colspan="2"><strong>Pazar Günü</strong></td>
+          <td><strong>${sundayCount} gün</strong></td>
+          <td></td>
+        </tr>
+      `;
+      recordsTableFooter.style.display = '';
+    }
+    
+    function addRecord() {
+      if (!appData.currentWeekId) return;
+      const date = recordDateInput.value;
+      const description = recordDescriptionInput.value.trim();
+      const hours = parseFloat(recordHoursInput.value) || 0;
+      if (!date || !description) {
+        alert('Lütfen tarih ve açıklama giriniz!');
+        return;
+      }
+      
+      if (appData.records.some(r => r.weekId === appData.currentWeekId && r.date === date)) {
+        alert('Bu tarih için zaten bir kayıt var!');
+        return;
+      }
+      
+      const newRecord = {
+        id: generateId(),
+        weekId: appData.currentWeekId,
+        date: date,
+        description: description,
+        hours: hours,
+        createdAt: new Date().toISOString()
+      };
+      appData.records.push(newRecord);
+      appData.lastUpdate = new Date();
+      saveData();
+      loadCurrentWeekRecords();
+      recordDescriptionInput.value = '';
+      recordHoursInput.value = '';
+      recordDescriptionInput.focus();
+    }
+    
+    function openEditWeekModal() {
+      const week = appData.weeks.find(w => w.id === appData.currentWeekId);
+      if (!week) return;
+      editWeekIdInput.value = week.id;
+      editWeekStartDateInput.value = formatDateForInput(new Date(week.startDate));
+      editWeekRangeInput.value = week.range;
+      editWeekModal.show();
+    }
+    
+    function saveEditedWeek() {
+      const weekId = editWeekIdInput.value;
+      const newStartDate = editWeekStartDateInput.valueAsDate;
+      const newRange = editWeekRangeInput.value.trim();
+      if (!weekId || !newStartDate || !newRange) return;
+      
+      const weekIndex = appData.weeks.findIndex(w => w.id === weekId);
+      if (weekIndex === -1) return;
+      
+      if (appData.weeks.some((w, i) => i !== weekIndex && new Date(w.startDate).getTime() === newStartDate.getTime())) {
+        alert('Bu tarihte başlayan bir hafta zaten var!');
+        return;
+      }
+      
+      appData.weeks[weekIndex].startDate = newStartDate.toISOString();
+      appData.weeks[weekIndex].range = newRange;
+      appData.lastUpdate = new Date();
+      saveData();
+      loadWeeksList();
+      loadCurrentWeekRecords();
+      editWeekModal.hide();
+    }
+    
+    function deleteCurrentWeek() {
+      if (!appData.currentWeekId || !confirm('Bu haftayı ve tüm kayıtlarını silmek istediğinize emin misiniz?')) return;
+      appData.records = appData.records.filter(r => r.weekId !== appData.currentWeekId);
+      appData.weeks = appData.weeks.filter(w => w.id !== appData.currentWeekId);
+      appData.currentWeekId = null;
+      appData.lastUpdate = new Date();
+      saveData();
+      loadWeeksList();
+      loadCurrentWeekRecords();
+    }
+    
+    function openEditRecordModal(recordId) {
+      const record = appData.records.find(r => r.id === recordId);
+      if (!record) return;
+      editRecordIdInput.value = record.id;
+      editRecordDateInput.value = record.date;
+      editRecordDescriptionInput.value = record.description;
+      editRecordHoursInput.value = record.hours || 0;
+      
+      const week = appData.weeks.find(w => w.id === record.weekId);
+      if (week) {
+        const weekStart = new Date(week.startDate);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        editRecordDateInput.min = formatDateForInput(weekStart);
+        editRecordDateInput.max = formatDateForInput(weekEnd);
+      }
+      editRecordModal.show();
+    }
+    
+    function saveEditedRecord() {
+      const recordId = editRecordIdInput.value;
+      const newDate = editRecordDateInput.value;
+      const newDescription = editRecordDescriptionInput.value.trim();
+      const newHours = parseFloat(editRecordHoursInput.value) || 0;
+      if (!recordId || !newDate || !newDescription) return;
+      
+      const recordIndex = appData.records.findIndex(r => r.id === recordId);
+      if (recordIndex === -1) return;
+      
+      if (appData.records.some((r, i) => i !== recordIndex && r.weekId === appData.records[recordIndex].weekId && r.date === newDate)) {
+        alert('Bu tarih için zaten bir kayıt var!');
+        return;
+      }
+      
+      appData.records[recordIndex].date = newDate;
+      appData.records[recordIndex].description = newDescription;
+      appData.records[recordIndex].hours = newHours;
+      appData.lastUpdate = new Date();
+      saveData();
+      loadCurrentWeekRecords();
+      editRecordModal.hide();
+    }
+    
+    function deleteRecord(recordId) {
+      if (!confirm('Bu kaydı silmek istediğinize emin misiniz?')) return;
+      appData.records = appData.records.filter(r => r.id !== recordId);
+      appData.lastUpdate = new Date();
+      saveData();
+      loadCurrentWeekRecords();
+    }
+    
+    function generateWeeklyReport(week, records) {
+      if (!records || records.length === 0) {
+        weeklyReport.textContent = 'Henüz kayıt eklenmedi';
+        return;
+      }
+      records.sort((a, b) => new Date(a.date) - new Date(b.date));
+      let reportText = `${week.range} ${new Date(week.startDate).getFullYear()} - ${appData.user} - Planlanan Mesailer\n\n`;
+      let totalHours = 0, sundayCount = 0;
+      records.forEach(r => {
+        const isSunday = new Date(r.date).getDay() === 0;
+        reportText += `${formatDate(r.date)}${isSunday ? ' (Pazar)' : ''} - ${r.description} - ${r.hours || 0} saat\n`;
+        totalHours += r.hours || 0;
+        if (isSunday) sundayCount++;
+      });
+      reportText += `\nToplam Mesai: ${totalHours} saat\nPazar Günleri: ${sundayCount} gün`;
+      weeklyReport.textContent = reportText;
+    }
+    
+    function generateDateRangeReport() {
+      const startDate = reportStartDateInput.value;
+      const endDate = reportEndDateInput.value;
+      if (!startDate || !endDate) {
+        alert('Lütfen başlangıç ve bitiş tarihlerini seçiniz!');
+        return;
+      }
+      if (new Date(startDate) > new Date(endDate)) {
+        alert('Başlangıç tarihi bitiş tarihinden sonra olamaz!');
+        return;
+      }
+      
+      const filteredRecords = appData.records.filter(r => {
+        const recordDate = new Date(r.date);
+        return recordDate >= new Date(startDate) && recordDate <= new Date(endDate);
+      });
+      if (filteredRecords.length === 0) {
+        dateRangeReport.textContent = 'Seçilen tarih aralığında kayıt bulunamadı';
+        return;
+      }
+      
+      filteredRecords.sort((a, b) => new Date(a.date) - new Date(b.date));
+      const recordsByWeek = {};
+      filteredRecords.forEach(r => {
+        const week = appData.weeks.find(w => w.id === r.weekId);
+        if (!week) return;
+        if (!recordsByWeek[week.id]) recordsByWeek[week.id] = { week, records: [] };
+        recordsByWeek[week.id].records.push(r);
+      });
+      
+      let reportText = `${appData.user} - ${formatDate(startDate)} - ${formatDate(endDate)} Mesai Raporu\n\n`;
+      let totalHours = 0, sundayCount = 0;
+      Object.values(recordsByWeek).forEach(w => {
+        reportText += `${w.week.range}\n`;
+        w.records.forEach(r => {
+          const isSunday = new Date(r.date).getDay() === 0;
+          reportText += `  ${formatDate(r.date)}${isSunday ? ' (Pazar)' : ''} - ${r.description} - ${r.hours || 0} saat\n`;
+          totalHours += r.hours || 0;
+          if (isSunday) sundayCount++;
+        });
+        reportText += '\n';
+      });
+      reportText += `Toplam Mesai: ${totalHours} saat\nPazar Günleri: ${sundayCount} gün`;
+      dateRangeReport.textContent = reportText;
+    }
+    
+    function copyWeeklyReport() {
+      if (!weeklyReport.textContent) return;
+      navigator.clipboard.writeText(weeklyReport.textContent).then(() => alert('Rapor panoya kopyalandı!'));
+    }
+    
+    function downloadWeeklyReport() {
+      if (!weeklyReport.textContent) return;
+      const blob = new Blob([weeklyReport.textContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${appData.user.replace(/\s+/g, '_')}_${getCurrentWeek().range.replace(/\s+/g, '_')}_mesai_raporu.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    function shareWeeklyReportOnWhatsApp() {
+      if (!weeklyReport.textContent) return;
+      const text = encodeURIComponent(weeklyReport.textContent);
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+    
+    function copyDateRangeReport() {
+      if (!dateRangeReport.textContent) return;
+      navigator.clipboard.writeText(dateRangeReport.textContent).then(() => alert('Rapor panoya kopyalandı!'));
+    }
+    
+    function downloadDateRangeReport() {
+      if (!dateRangeReport.textContent) return;
+      const blob = new Blob([dateRangeReport.textContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${appData.user.replace(/\s+/g, '_')}_${formatDate(reportStartDateInput.value).replace(/\s+/g, '_')}-${formatDate(reportEndDateInput.value).replace(/\s+/g, '_')}_mesai_raporu.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    function shareDateRangeReportOnWhatsApp() {
+      if (!dateRangeReport.textContent) return;
+      const text = encodeURIComponent(dateRangeReport.textContent);
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+    
+    function backupData() {
+      const backupData = {
+        user: appData.user,
+        weeks: appData.weeks,
+        records: appData.records,
+        version: 1,
+        backupDate: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mesai_takip_yedek_${formatDateForFileName(new Date())}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    function restoreData() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = event => {
+          try {
+            const backupData = JSON.parse(event.target.result);
+            if (!backupData.user || !backupData.weeks || !backupData.records) throw new Error('Geçersiz yedek dosyası formatı');
+            if (!confirm('Mevcut verilerin üzerine yedekten yükleme yapılacak. Devam etmek istiyor musunuz?')) return;
+            appData.user = backupData.user;
+            appData.weeks = backupData.weeks;
+            appData.records = backupData.records;
+            appData.lastUpdate = new Date();
+            appData.currentWeekId = null;
+            saveData();
+            showMainApp();
+            alert('Yedek başarıyla yüklendi!');
+          } catch (err) {
+            alert('Yedek yüklenirken hata oluştu: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+    
+    function resetData() {
+      if (!confirm('TÜM verileriniz silinecek. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?')) return;
+      const userName = appData.user;
+      appData.user = userName;
+      appData.weeks = [];
+      appData.records = [];
+      appData.currentWeekId = null;
+      appData.lastUpdate = new Date();
+      saveData();
+      showMainApp();
+      alert('Tüm veriler sıfırlandı!');
+    }
+    
+    function getWeekRecordCount(weekId) {
+      return appData.records.filter(r => r.weekId === weekId).length;
+    }
+    
+    function getCurrentWeek() {
+      return appData.weeks.find(w => w.id === appData.currentWeekId);
+    }
+    
+    function updateStatistics() {
+      totalWeeksCount.textContent = appData.weeks.length;
+      totalRecordsCount.textContent = appData.records.length;
+      lastUpdateTime.textContent = formatDateTime(appData.lastUpdate);
+    }
+    
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+    
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day < 10 ? '0' + day : day}.${month < 10 ? '0' + month : month}.${year}`;
+    }
+    
+    function formatDateForInput(date) {
+      if (!date) return '';
+      if (typeof date === 'string') date = new Date(date);
+      return date.toISOString().split('T')[0];
+    }
+    
+    function formatDateTime(date) {
+      if (!date) return '';
+      if (typeof date === 'string') date = new Date(date);
+      return `${formatDate(date)} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+    }
+    
+    function formatDateForFileName(date) {
+      if (!date) return '';
+      if (typeof date === 'string') date = new Date(date);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}_${hours < 10 ? '0' + hours : hours}${minutes < 10 ? '0' + minutes : minutes}`;
+    }
+    
+    function saveData() {
+      try {
+        localStorage.setItem('mesaiTakipData', JSON.stringify(appData));
+        updateStatistics();
+      } catch (err) {
+        console.error('Veri kaydetme hatası:', err);
+        alert('Veri kaydedilirken hata oluştu!');
+      }
+    }
+    
+    function loadData() {
+      try {
+        const savedData = localStorage.getItem('mesaiTakipData');
+        if (savedData) {
+          const parsedData = JSON.parse(savedData);
+          appData.user = parsedData.user || null;
+          appData.weeks = parsedData.weeks || [];
+          appData.records = parsedData.records || [];
+          appData.currentWeekId = parsedData.currentWeekId || null;
+          appData.lastUpdate = parsedData.lastUpdate ? new Date(parsedData.lastUpdate) : new Date();
+        }
+      } catch (err) {
+        console.error('Veri yükleme hatası:', err);
+        localStorage.removeItem('mesaiTakipData');
+      }
+    }
+  </script>
+</body>
+</html>
